@@ -157,28 +157,29 @@ export class Atracao {
         }
     }
 
-    /**
- * Remove uma atração do banco de dados.
- * @param idAtracao ID da atração a ser removida.
- * @returns **true** se a atração for removida com sucesso, **false** se ocorrer um erro.
- */
-static async removerAtracao(idAtracao: number): Promise<boolean> {
-    try {
-        // Query para deletar a atração da tabela atracao
-        const queryDeleteAtracao = `DELETE FROM atracao WHERE idAtracao = ${idAtracao}`;
+    static async atualizarAtracao(atracao: Atracao, idAtracao: number): Promise<Boolean> {
+        let queryResult = false;
 
-        // Executando a query
-        const result = await database.query(queryDeleteAtracao);
-
-        // Verificando se a atração foi removida com sucesso
-        if (result.rowCount !== 0) {
-            return true; // Atração removida com sucesso
-        } else {
-            return false; // A atração não foi encontrada ou não pôde ser removida
+        try {
+            const queryUpdateAtracao = `UPDATE atracao SET
+                                            nomeAtracao='${atracao.getNomeAtracao().toUpperCase()}'
+                                            WHERE idAtracao=${idAtracao}`;
+            console.log('tentando executar a query');
+            
+            await database.query(queryUpdateAtracao)
+                .then((result) => {
+                    console.log('query execytada');
+                    
+                    if (result.rowCount !== 0) {
+                        console.log('mudança realizada');
+                        
+                        queryResult = true;
+                    }
+                })
+            return queryResult;
+        } catch (error) {
+            console.log(`Erro na consulta: ${error}`);
+            return queryResult;
         }
-    } catch (error) {
-        console.log(`Erro ao remover atração: ${error}`);
-        return false; // Ocorreu um erro ao tentar remover a atração
     }
-}
 }
