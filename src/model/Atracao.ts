@@ -156,4 +156,29 @@ export class Atracao {
             return insertResult;
         }
     }
+
+    /**
+ * Remove uma atração do banco de dados.
+ * @param idAtracao ID da atração a ser removida.
+ * @returns **true** se a atração for removida com sucesso, **false** se ocorrer um erro.
+ */
+static async removerAtracao(idAtracao: number): Promise<boolean> {
+    try {
+        // Query para deletar a atração da tabela atracao
+        const queryDeleteAtracao = `DELETE FROM atracao WHERE idAtracao = ${idAtracao}`;
+
+        // Executando a query
+        const result = await database.query(queryDeleteAtracao);
+
+        // Verificando se a atração foi removida com sucesso
+        if (result.rowCount !== 0) {
+            return true; // Atração removida com sucesso
+        } else {
+            return false; // A atração não foi encontrada ou não pôde ser removida
+        }
+    } catch (error) {
+        console.log(`Erro ao remover atração: ${error}`);
+        return false; // Ocorreu um erro ao tentar remover a atração
+    }
+}
 }

@@ -205,4 +205,28 @@ export class Habitat {
             return insertResult;
         }
     }
+    /**
+ * Remove um habitat do banco de dados.
+ * @param idHabitat ID do habitat a ser removido.
+ * @returns **true** se o habitat for removido com sucesso, **false** se ocorrer um erro.
+ */
+static async removerHabitat(idHabitat: number): Promise<boolean> {
+    try {
+        // Query para deletar o habitat da tabela habitat
+        const queryDeleteHabitat = `DELETE FROM habitat WHERE idHabitat = ${idHabitat}`;
+
+        // Executando a query
+        const result = await database.query(queryDeleteHabitat);
+
+        // Verificando se o habitat foi removido com sucesso
+        if (result.rowCount !== 0) {
+            return true; // Habitat removido com sucesso
+        } else {
+            return false; // O habitat não foi encontrado ou não pôde ser removido
+        }
+    } catch (error) {
+        console.log(`Erro ao remover habitat: ${error}`);
+        return false; // Ocorreu um erro ao tentar remover o habitat
+    }
+}
 }
