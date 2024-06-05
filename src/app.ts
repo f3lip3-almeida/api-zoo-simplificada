@@ -150,6 +150,7 @@ server.put('/atualizar/animal', async (req, res) => {
     }
 });
 
+
 new DatabaseModel().testeConexao().then((resbd) => {
     if(resbd) {
         server.listen(port, () => {
